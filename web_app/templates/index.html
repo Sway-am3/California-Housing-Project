@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>House Price Prediction</title>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+<style>
+
+
+:root{
+    --bg:#F5F7FA;
+    --card:#FFFFFF;
+    --text:#111827;
+    --subtext:#6B7280;
+    --input:#F9FAFB;
+    --border:#E5E7EB;
+    --accent:#3B82F6;
+    --button:#111827;
+}
+
+
+body.dark{
+    --bg:#0F172A;
+    --card:#1E293B;
+    --text:#F1F5F9;
+    --subtext:#94A3B8;
+    --input:#334155;
+    --border:#475569;
+    --accent:#60A5FA;
+    --button:#3B82F6;
+}
+
+
+*{
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--bg);
+    transition:0.3s ease;
+}
+
+
+.theme-toggle{
+    position:absolute;
+    top:25px;
+    right:25px;
+}
+
+
+.switch{
+    position:relative;
+    width:65px;
+    height:34px;
+    background:var(--border);
+    border-radius:50px;
+    cursor:pointer;
+    transition:0.3s;
+    display:flex;
+    align-items:center;
+    padding:5px;
+}
+
+
+.switch i{
+    position:absolute;
+    font-size:14px;
+    transition:0.3s;
+}
+
+
+.sun{
+    left:10px;
+    color:#f59e0b;
+}
+
+
+.moon{
+    right:10px;
+    color:#60a5fa;
+}
+
+
+.slider{
+    width:24px;
+    height:24px;
+    background:white;
+    border-radius:50%;
+    transition:0.3s ease;
+    box-shadow:0 3px 8px rgba(0,0,0,0.2);
+}
+
+
+body.dark .slider{
+    transform:translateX(30px);
+}
+
+
+.container{
+    width:750px;
+    padding:50px;
+    border-radius:20px;
+    background:var(--card);
+    box-shadow:0 20px 60px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+
+h1{
+    text-align:center;
+    margin-bottom:40px;
+    font-weight:600;
+    color:var(--text);
+}
+
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px 30px;
+}
+
+
+.form-group{
+    position:relative;
+}
+
+
+input{
+    width:100%;
+    padding:14px 14px 14px 42px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--input);
+    color:var(--text);
+    outline:none;
+    transition:0.3s;
+}
+
+
+input:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(59,130,246,0.1);
+}
+
+
+label{
+    position:absolute;
+    left:42px;
+    top:14px;
+    font-size:13px;
+    color:var(--subtext);
+    transition:0.3s;
+    pointer-events:none;
+}
+
+
+input:focus + label,
+input:not(:placeholder-shown) + label{
+    top:-8px;
+    left:35px;
+    font-size:11px;
+    background:var(--card);
+    padding:0 6px;
+    color:var(--accent);
+}
+
+
+.form-group i{
+    position:absolute;
+    left:15px;
+    top:16px;
+    font-size:14px;
+    color:var(--subtext);
+}
+
+
+button{
+    margin-top:40px;
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:14px;
+    background:var(--button);
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+
+.results{
+    margin-top:40px;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:20px;
+}
+
+
+.result-card{
+    background:var(--input);
+    padding:20px;
+    border-radius:16px;
+    border:1px solid var(--border);
+    text-align:center;
+}
+
+
+.result-title{
+    font-size:13px;
+    color:var(--subtext);
+}
+
+
+.result-value{
+    margin-top:8px;
+    font-size:18px;
+    font-weight:600;
+    color:var(--text);
+}
+
+
+@media(max-width:768px){
+    .container{
+        width:95%;
+        padding:30px;
+    }
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+    .results{
+        grid-template-columns:1fr;
+    }
+}
+
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- Toggle Box -->
+<div class="theme-toggle">
+    <div class="switch" onclick="toggleMode()">
+        <i class="fa-solid fa-sun sun"></i>
+        <i class="fa-solid fa-moon moon"></i>
+        <div class="slider"></div>
+    </div>
+</div>
+
+
+<div class="container">
+
+
+<h1>🏠 House Price Prediction</h1>
+
+
+<form method="POST">
+<div class="form-grid">
+
+
+<div class="form-group">
+<i class="fa-solid fa-coins"></i>
+<input type="number" step="any" name="MedInc" placeholder=" " required>
+<label>Median Income</label>
+</div>
+
+
+<div class="form-group">
+<i class="fa-solid fa-calendar"></i>
+<input type="number" step="any" name="HouseAge" placeholder=" " required>
+<label>House Age</label>
+</div>
+
+
+<div class="form-group">
+<i class="fa-solid fa-house"></i>
+<input type="number" step="any" name="AveRooms" placeholder=" " required>
+<label>Average Rooms</label>
+</div>
+
+
+<div class="form-group">
+<i class="fa-solid fa-bed"></i>
+<input type="number" step="any" name="AveBedrms" placeholder=" " required>
+<label>Average Bedrooms</label>
+</div>
+
+
+<div class="form-group">
+<i class="fa-solid fa-users"></i>
+<input type="number" step="any" name="Population" placeholder=" " required>
+<label>Population</label>
+</div>
+
+
+<div class="form-group">
+<i class="fa-solid fa-person"></i>
+<input type="number" step="any" name="AveOccup" placeholder=" " required>
+<label>Average Occupancy</label>
+</div>
+
+
+<div class="form-group">
+<i class="fa-solid fa-location-dot"></i>
+<input type="number" step="any" name="Latitude" placeholder=" " required>
+<label>Latitude</label>
+</div>
+
+
+<div class="form-group">
+<i class="fa-solid fa-map"></i>
+<input type="number" step="any" name="Longitude" placeholder=" " required>
+<label>Longitude</label>
+</div>
+
+
+</div>
+
+
+<button type="submit">Predict Price</button>
+</form>
+
+
+{% if results %}
+<div class="results">
+    <div class="result-card">
+        <div class="result-title">Regression Price</div>
+        <div class="result-value">${{ results.regression }}k</div>
+    </div>
+    <div class="result-card">
+        <div class="result-title">Random Forest Level</div>
+        <div class="result-value">{{ results.rf }}</div>
+    </div>
+    <div class="result-card">
+        <div class="result-title">SVM Level</div>
+        <div class="result-value">{{ results.svm }}</div>
+    </div>
+</div>
+{% endif %}
+
+
+</div>
+
+
+<script>
+function toggleMode(){
+    document.body.classList.toggle("dark");
+    localStorage.setItem("theme",
+        document.body.classList.contains("dark") ? "dark" : "light"
+    );
+}
+
+
+window.onload = function(){
+    if(localStorage.getItem("theme") === "dark"){
+        document.body.classList.add("dark");
+    }
+}
+</script>
+
+
+</body>
+</html>
